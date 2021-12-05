@@ -6,7 +6,7 @@
 /*   By: aklaikel <aklaikel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 16:16:36 by aklaikel          #+#    #+#             */
-/*   Updated: 2021/12/04 19:08:26 by aklaikel         ###   ########.fr       */
+/*   Updated: 2021/12/05 23:09:00 by aklaikel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,27 +59,30 @@ char *afternewline(char *str)
 
 char *get_next_line(int fd)
 {
-	static char	*shi;
+	static char	*buffer;
 	char		*ret;
 	char		*tmp;
+	char		*tmp2;
 	char		*str;
 	int 		i;
-	
+
 	str = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (shi && *shi)
+	if (buffer && *buffer)
 	{
-		if (check_newline(shi) >= 0)
+		if (check_newline(buffer) >= 0)
 		{
-			str = find_i(shi);
-			shi = afternewline(shi);
+			str = find_i(buffer);
+			tmp = afternewline(buffer);
+			free(buffer);
+			buffer = tmp;
 			return (str);
 		}
 		else
 		{
-			str = shi;
-			shi = NULL;
+			str = buffer;
+			buffer = NULL;
 		}
 	}
 	ret = (char *)malloc(BUFFER_SIZE + 1);
@@ -96,17 +99,23 @@ char *get_next_line(int fd)
 				str = tmp;
 			else
 			{
-				str = ft_strjoin(str, tmp);
+				tmp2 = ft_strjoin(str, tmp);
+				free(str);
 				free(tmp);
+				str = tmp2;
 			}
-			shi = afternewline(ret);
+			buffer = afternewline(ret);
 			free(ret);
 			return (str);
 		}
 		if (str == NULL)
 			str = ft_strdup(ret);
 		else
-			str = ft_strjoin(str, ret);
+		{
+			tmp = ft_strjoin(str, ret);
+			free(str);
+			str = tmp;
+		}
 		i = read(fd, ret, BUFFER_SIZE);
 	}
 	free(ret);
@@ -137,7 +146,7 @@ char *get_next_line(int fd)
 	return (free(ret), str);
 	*/
 }
-
+/*
 int main()
 {
 	int fd = open("text.txt", O_RDONLY);
@@ -149,4 +158,4 @@ int main()
 		printf("%s", r);
 		free(r);
 	}
-}
+}*/

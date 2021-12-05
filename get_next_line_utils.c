@@ -6,7 +6,7 @@
 /*   By: aklaikel <aklaikel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 16:50:44 by aklaikel          #+#    #+#             */
-/*   Updated: 2021/12/04 19:08:06 by aklaikel         ###   ########.fr       */
+/*   Updated: 2021/12/05 23:13:08 by aklaikel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <stdio.h>
 
-size_t	ft_strlen(const char *str)
+size_t	ft_strlen(char *str)
 {
 	int	i;
 
@@ -57,12 +57,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!str)
 		return (NULL);
 	join(s1, s2, str);
-	if (s1)
-		free(s1);
+	//if (s1)
+	//	free(s1);
 	return (str);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	size_t	i;
 	char	*s2;
