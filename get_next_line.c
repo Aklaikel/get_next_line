@@ -6,9 +6,11 @@
 /*   By: aklaikel <aklaikel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 16:16:36 by aklaikel          #+#    #+#             */
-/*   Updated: 2021/12/05 23:09:00 by aklaikel         ###   ########.fr       */
+/*   Updated: 2021/12/07 04:48:13 by aklaikel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "get_next_line.h"
 
 #include "get_next_line.h"
 
@@ -57,12 +59,56 @@ char *afternewline(char *str)
 	return (s);
 }
 
+int	handle_rest(char **buffer, char **str)
+{
+	char	*tmp;
+	
+	if (check_newline(*buffer) >= 0)
+	{
+		*str = find_i(*buffer);
+		tmp = afternewline(*buffer);
+		free(*buffer);
+		*buffer = tmp;
+		return (1);
+	}
+	else
+	{
+		*str = *buffer;
+		*buffer = NULL;
+		return (0);
+	}
+}
+
+int handle_ret(char **ret, char **str, char **buffer)
+{
+	char	*tmp;
+	char	*tmp2;
+	
+	if (check_newline(*ret) >= 0)
+	{
+		tmp = find_i(*ret);
+		if (*str == NULL)
+			*str = tmp;
+		else
+		{
+			tmp2 = ft_strjoin(*str, tmp);
+			free(*str);
+			free(tmp);
+			*str = tmp2;
+		}
+		*buffer = afternewline(*ret);
+		return (free(*ret), 1);
+	}
+	tmp = ft_strjoin(*str, *ret);
+	free(*str);
+	*str = tmp;
+	return (0);
+}
+
 char *get_next_line(int fd)
 {
 	static char	*buffer;
 	char		*ret;
-	char		*tmp;
-	char		*tmp2;
 	char		*str;
 	int 		i;
 
@@ -70,21 +116,8 @@ char *get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	if (buffer && *buffer)
-	{
-		if (check_newline(buffer) >= 0)
-		{
-			str = find_i(buffer);
-			tmp = afternewline(buffer);
-			free(buffer);
-			buffer = tmp;
+		if (handle_rest(&buffer, &str))
 			return (str);
-		}
-		else
-		{
-			str = buffer;
-			buffer = NULL;
-		}
-	}
 	ret = (char *)malloc(BUFFER_SIZE + 1);
 	if (!ret)
 		return (NULL);
@@ -92,70 +125,9 @@ char *get_next_line(int fd)
 	while (i > 0)
 	{
 		ret[i] = '\0';
-		if (check_newline(ret) >= 0)
-		{
-			tmp = find_i(ret);
-			if (str == NULL)
-				str = tmp;
-			else
-			{
-				tmp2 = ft_strjoin(str, tmp);
-				free(str);
-				free(tmp);
-				str = tmp2;
-			}
-			buffer = afternewline(ret);
-			free(ret);
+		if (handle_ret(&ret, &str, &buffer))
 			return (str);
-		}
-		if (str == NULL)
-			str = ft_strdup(ret);
-		else
-		{
-			tmp = ft_strjoin(str, ret);
-			free(str);
-			str = tmp;
-		}
 		i = read(fd, ret, BUFFER_SIZE);
 	}
-	free(ret);
-	return (str);
-	/*
-	i = read(fd, ret, BUFFER_SIZE);
-	if (i == 0 && shi && *shi)
-	{
-		str = shi;
-		shi = NULL;
-		return (free(ret), str);
-	}
-	if (i <= 0)
-		return (free(ret), NULL);
-	ret[i] = '\0';
-	if(!shi)
-		shi = ft_strdup(ret);	
-	else
-		shi = ft_strjoin(shi, ret);
-	if (check_newline(shi) >= 0)
-	{
-		write(1,"k\n", 2);
-		str = find_i(shi);
-		shi = afternewline(shi);
-	}
-	else
-		return (free(ret), get_next_line(fd));
 	return (free(ret), str);
-	*/
 }
-/*
-int main()
-{
-	int fd = open("text.txt", O_RDONLY);
-	char *r;
-	
-	r = NULL;
-	while((r = get_next_line(fd)))
-	{
-		printf("%s", r);
-		free(r);
-	}
-}*/

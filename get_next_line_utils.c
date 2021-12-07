@@ -6,7 +6,7 @@
 /*   By: aklaikel <aklaikel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/04 16:50:44 by aklaikel          #+#    #+#             */
-/*   Updated: 2021/12/05 23:13:08 by aklaikel         ###   ########.fr       */
+/*   Updated: 2021/12/07 01:31:42 by aklaikel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,6 @@ static void	join(char *dest, char *src, char *str)
 	str[i + j] = '\0';
 }
 
-char	*ft_strjoin(char *s1, char *s2)
-{
-	char	*str;
-	size_t	total;
-
-	total = ft_strlen(s1) + ft_strlen(s2);
-	str = (char *)malloc(sizeof(char) * (total + 1));
-	if (!str)
-		return (NULL);
-	join(s1, s2, str);
-	//if (s1)
-	//	free(s1);
-	return (str);
-}
-
 char	*ft_strdup(char *s1)
 {
 	size_t	i;
@@ -79,6 +64,23 @@ char	*ft_strdup(char *s1)
 	}
 	s2[i] = '\0';
 	return (s2);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*str;
+	size_t	total;
+
+	if (s1 == NULL)
+		return (ft_strdup(s2));
+	total = ft_strlen(s1) + ft_strlen(s2);
+	str = (char *)malloc(sizeof(char) * (total + 1));
+	if (!str)
+		return (NULL);
+	join(s1, s2, str);
+	//if (s1)
+	//	free(s1);
+	return (str);
 }
 
 
