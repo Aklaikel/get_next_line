@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aklaikel <aklaikel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/02 16:16:36 by aklaikel          #+#    #+#             */
-/*   Updated: 2021/12/07 18:50:12 by aklaikel         ###   ########.fr       */
+/*   Created: 2021/12/07 19:09:34 by aklaikel          #+#    #+#             */
+/*   Updated: 2021/12/07 19:13:45 by aklaikel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*find_i(char *str)
 {
@@ -104,7 +104,7 @@ int	handle_ret(char **ret, char **str, char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*buffer;
+	static char	*buffer[10240];
 	char		*ret;
 	char		*str;
 	int			i;
@@ -112,8 +112,8 @@ char	*get_next_line(int fd)
 	str = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (buffer && *buffer)
-		if (handle_rest(&buffer, &str))
+	if (buffer[fd] && *buffer[fd])
+		if (handle_rest(&buffer[fd], &str))
 			return (str);
 	ret = (char *)malloc(BUFFER_SIZE + 1);
 	if (!ret)
@@ -122,7 +122,7 @@ char	*get_next_line(int fd)
 	while (i > 0)
 	{
 		ret[i] = '\0';
-		if (handle_ret(&ret, &str, &buffer))
+		if (handle_ret(&ret, &str, &buffer[fd]))
 			return (str);
 		i = read(fd, ret, BUFFER_SIZE);
 	}

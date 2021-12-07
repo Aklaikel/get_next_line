@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aklaikel <aklaikel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/04 16:50:44 by aklaikel          #+#    #+#             */
-/*   Updated: 2021/12/07 19:05:03 by aklaikel         ###   ########.fr       */
+/*   Created: 2021/12/07 19:10:27 by aklaikel          #+#    #+#             */
+/*   Updated: 2021/12/07 19:22:54 by aklaikel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"get_next_line.h"
+#include"get_next_line_bonus.h"
 
 size_t	ft_strlen(char *str)
 {
